@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">ToDo</string>
+    <string name="todo_title_hint">Enter a title for ToDo task</string>
+    <string name="task_title_label">Title</string>
+    <string name="task_details_label">Details</string>
+    <string name="todo_completed_label">Completed</string>
+    <string name="date_picker">Date of task</string>
+    <string name="new_task">New Task</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle_format">%1$s tasks</string>
+    <string name="task_report">%1$s! The task was created on %2$s. %3$s, and %4$s</string>
+    <string name="task_report_completed">The task is completed</string>
+    <string name="task_report_uncompleted">The task is not completed</string>
+    <string name="send_report">Send crime report via</string>
+</resources>
