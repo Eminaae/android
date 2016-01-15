@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LeftorTest</string>
+    <string name="welcome_text">Loading application</string>
 </resources>
