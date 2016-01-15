@@ -12,6 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ba.leftor.exercises.leftortest.models.TaskGroup;
+
 /**
  * Created by USER on 15.1.2016.
  */
@@ -25,11 +30,12 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.todo_list);
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
-        tabLayout = (TabLayout)findViewById(R.id.tabs);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        mViewPager = (ViewPager)findViewById(R.id.viewpager);
-        mMyAdapter = new MyAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        TodoService todoService = new TodoService();
+        mMyAdapter = new MyAdapter(getSupportFragmentManager(), todoService.getTaskGroups());
         mViewPager.setAdapter(mMyAdapter);
         setSupportActionBar(toolbar);
         tabLayout.setupWithViewPager(mViewPager);
@@ -40,25 +46,29 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
 
     }
 
-    public class MyAdapter extends FragmentStatePagerAdapter{
+    public class MyAdapter extends FragmentStatePagerAdapter {
 
-        public MyAdapter(FragmentManager fm) {
+        private final List<TaskGroup> taskGroups;
+
+        // TODO: 15/01/16 poslati podatke
+        public MyAdapter(FragmentManager fm, List<TaskGroup> taskGroups) {
             super(fm);
+            this.taskGroups = taskGroups == null ? new ArrayList<TaskGroup>() : taskGroups;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return ToDoGroupFragment.newInstance("22","333");
+            return ToDoGroupFragment.newInstance(taskGroups.get(position));
         }
 
         @Override
         public int getCount() {
-            return 5;
+            return taskGroups == null ? 0 : taskGroups.size();
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "fragment" + position;
+            return taskGroups.get(position).getName();
         }
     }
 

@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ba.leftor.exercises.leftortest.models.TaskGroup;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +30,7 @@ public class ToDoGroupFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private TaskGroup taskGroup;
 
     /**
      * Use this factory method to create a new instance of
@@ -89,6 +92,17 @@ public class ToDoGroupFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    /**
+     * Kreira fragment i dodijeli task group.
+     * @param taskGroup
+     * @return
+     */
+    public static Fragment newInstance(TaskGroup taskGroup) {
+        ToDoGroupFragment fragment = new ToDoGroupFragment();
+        fragment.taskGroup = taskGroup;
+        return fragment;
     }
 
     /**
