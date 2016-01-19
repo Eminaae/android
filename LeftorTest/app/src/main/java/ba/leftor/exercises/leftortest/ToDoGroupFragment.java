@@ -4,10 +4,16 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import java.util.List;
+
+import ba.leftor.exercises.leftortest.models.Task;
 import ba.leftor.exercises.leftortest.models.TaskGroup;
 
 
@@ -31,6 +37,12 @@ public class ToDoGroupFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private TaskGroup taskGroup;
+    private Task task;
+    private RecyclerView mRecyclerView;
+    public List<Task> taskList;
+
+    private TextView newTask;
+    private TextView newTaskGroup;
 
     /**
      * Use this factory method to create a new instance of
@@ -57,17 +69,19 @@ public class ToDoGroupFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_to_do_group, container, false);
+        View view = inflater.inflate(R.layout.fragment_to_do_group, container, false);
+        mRecyclerView = (RecyclerView)view.findViewById(R.id.todo_recycler_view);
+        TaskAdapter adapter = new TaskAdapter(Task.createTaskList(20));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(adapter);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

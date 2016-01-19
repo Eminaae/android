@@ -24,8 +24,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view){
         TextView textView = (TextView)findViewById(R.id.welcome);
         String text = textView.getText().toString();
-        Intent intent = new Intent(this, ToDoListActivity.class);
-        startActivity(intent);
+        run();
 
     }
 

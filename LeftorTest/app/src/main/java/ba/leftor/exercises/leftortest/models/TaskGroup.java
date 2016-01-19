@@ -10,6 +10,7 @@ public class TaskGroup {
 
     private String name;
     private int group_id;
+
     List<Task> mTaskList = new ArrayList<>();
 
     public List<Task> getTaskList() {
@@ -24,6 +25,9 @@ public class TaskGroup {
         this.name = name;
         this.group_id = group_id;
         this.mTaskList = new ArrayList<>();
+    }
+
+    public TaskGroup() {
     }
 
     public String getName() {
@@ -48,24 +52,27 @@ public class TaskGroup {
         TaskGroup kuca = new TaskGroup("Kuca", 0);
 
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new Task("Usisati","Iza kauca",1,0,kuca.getGroup_id()));
+        tasks.add(new Task("Usisati","Iza kauca",Status.MEDIUM,0,kuca.getGroup_id()));
         tasks.add(new Task("Usisati","Iza kauca",1,0,kuca.getGroup_id()));
         tasks.add(new Task("Usisati","Iza kauca",1,0,kuca.getGroup_id()));
         tasks.add(new Task("Usisati","Iza kauca",1,0,kuca.getGroup_id()));
 
         kuca.add(tasks);
 
-
         TaskGroup fakultet = new TaskGroup("Fakultet", 1);
-
-
-
+        tasks.add(new Task("Math", "Kolokvij II", Status.VERY_HIGH, Priority.IN_PROGRESS, fakultet.getGroup_id()));
+        tasks.add(new Task("Fizika", "Kolokvij II", Status.HIGH, Priority.IN_PROGRESS, fakultet.group_id));
+        fakultet.add(tasks);
         TaskGroup posao = new TaskGroup("Posao", 2);
         TaskGroup birtija = new TaskGroup("Birtija", 3);
+        TaskGroup trening = new TaskGroup("Trening", 4);
+
         groups.add(kuca);
         groups.add(fakultet);
         groups.add(posao);
         groups.add(birtija);
+        groups.add(trening);
+
         return groups;
     }
 
@@ -79,5 +86,13 @@ public class TaskGroup {
 
     private void add(Task task){
         this.mTaskList.add(task);
+    }
+
+    public static List<TaskGroup> createTaskGroup(int groupNum){
+        List<TaskGroup> taskGroups = new ArrayList<>();
+        for(int i = 0; i < groupNum; i++){
+            taskGroups.add(new TaskGroup());
+        }
+        return taskGroups;
     }
 }

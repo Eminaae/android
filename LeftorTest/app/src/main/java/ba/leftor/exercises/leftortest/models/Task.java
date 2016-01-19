@@ -1,5 +1,8 @@
 package ba.leftor.exercises.leftortest.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by USER on 15.1.2016.
  */
@@ -17,6 +20,9 @@ public class Task {
         this.status = status;
         this.priority = priority;
         this.group_id = group_id;
+    }
+
+    public Task() {
     }
 
     public String getName() {
@@ -57,5 +63,14 @@ public class Task {
 
     public void setGroup_id(int group_id) {
         this.group_id = group_id;
+    }
+
+    public static List<Task> createTaskList(int taskNum){
+        List<Task> tasks = new ArrayList<>();
+        for (int i = 0; i < taskNum; i++){
+            Task task = new Task("Math", "Kolokvij II", Status.VERY_HIGH, Priority.IN_PROGRESS, 1);
+            tasks.add(task);
+        }
+        return tasks;
     }
 }
