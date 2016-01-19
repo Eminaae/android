@@ -2,7 +2,7 @@
     <string name="app_name">LeftorTest</string>
     <string name="welcome_text">Loading application...</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">FRAGMENT #</string>
     <string name="add_new_task">Add new task</string>
     <string name="add_new_group">Add new group</string>
@@ -12,5 +12,7 @@
     <string name="enter_task_description">Enter task description</string>
     <string name="enter_task_group">Enter task group</string>
     <string name="save_btn">Save</string>
+    <string name="select_task_group">Select task group</string>
+    <string name="task_dialog_add_task_btn">Dodaj task</string>
 
 </resources>

@@ -52,10 +52,10 @@ public class TaskGroup {
         TaskGroup kuca = new TaskGroup("Kuca", 0);
 
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new Task("Usisati","Iza kauca",Status.MEDIUM,0,kuca.getGroup_id()));
-        tasks.add(new Task("Usisati","Iza kauca",1,0,kuca.getGroup_id()));
-        tasks.add(new Task("Usisati","Iza kauca",1,0,kuca.getGroup_id()));
-        tasks.add(new Task("Usisati","Iza kauca",1,0,kuca.getGroup_id()));
+        tasks.add(new Task("Usisati", "Iza kauca", Status.MEDIUM, 0, kuca.getGroup_id()));
+        tasks.add(new Task("22", "Iza kauca", 1, 0, kuca.getGroup_id()));
+        tasks.add(new Task("Us22i3232323sati", "Iza kauca", 1, 0, kuca.getGroup_id()));
+        tasks.add(new Task("Usis34ati", "Iza kauca", 1, 0, kuca.getGroup_id()));
 
         kuca.add(tasks);
 
@@ -72,6 +72,12 @@ public class TaskGroup {
         groups.add(posao);
         groups.add(birtija);
         groups.add(trening);
+        //For testing purpose
+        groups.add(trening);
+        groups.add(trening);
+        groups.add(trening);
+        groups.add(trening);
+        groups.add(trening);
 
         return groups;
     }
@@ -80,19 +86,24 @@ public class TaskGroup {
         this.mTaskList.addAll(tasks);
     }
 
-    private void add(List<Task> tasks){
+    public void add(List<Task> tasks) {
         this.mTaskList.addAll(tasks);
     }
 
-    private void add(Task task){
+    public void add(Task task) {
         this.mTaskList.add(task);
     }
 
-    public static List<TaskGroup> createTaskGroup(int groupNum){
+    public static List<TaskGroup> createTaskGroup(int groupNum) {
         List<TaskGroup> taskGroups = new ArrayList<>();
-        for(int i = 0; i < groupNum; i++){
+        for (int i = 0; i < groupNum; i++) {
             taskGroups.add(new TaskGroup());
         }
         return taskGroups;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

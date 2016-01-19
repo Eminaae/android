@@ -1,52 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/edit_task_group"
-              android:orientation="vertical"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center">
+    android:id="@+id/edit_task_group"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/lbl_task"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="@string/enter_task_title"/>
+        android:text="@string/enter_task_title" />
+
     <EditText
         android:id="@+id/new_task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:imeOptions="actionDone"
-        android:inputType="text"/>
+        android:inputType="text" />
 
     <TextView
         android:id="@+id/lbl_task_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enter_task_description"/>
+        android:text="@string/enter_task_description" />
+
     <EditText
         android:id="@+id/new_task_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:imeOptions="actionDone"
-        android:inputType="text"/>
+        android:inputType="text" />
 
     <TextView
         android:id="@+id/lbl_task_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enter_task_group"/>
-    <EditText
-        android:id="@+id/new_task_group"
+        android:text="@string/select_task_group" />
+
+    <Spinner
+        android:id="@+id/taskGroupsSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:imeOptions="actionDone"
-        android:inputType="text"/>
+        android:layout_height="50dp"></Spinner>
+
+
     <Button
-        android:id="@+id/save_btn_id"
+        android:id="@+id/task_dialog_add_task_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/new_task_group"
-        android:text="@string/save_btn">
+        android:layout_gravity="center"
+        android:text="@string/task_dialog_add_task_btn">
 
     </Button>
 

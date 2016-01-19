@@ -78,9 +78,13 @@ public class ToDoGroupFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_to_do_group, container, false);
         mRecyclerView = (RecyclerView)view.findViewById(R.id.todo_recycler_view);
-        TaskAdapter adapter = new TaskAdapter(Task.createTaskList(20));
+        /**
+         * Za konkretnu {@link TaskGroup} dohvatamo {@link TaskGroup#getTaskList()} listu taskova
+         */
+        TaskAdapter adapter = new TaskAdapter(this.taskGroup.getTaskList());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(adapter);
+//        mRecyclerView.setHasFixedSize(true);
         return view;
     }
 
