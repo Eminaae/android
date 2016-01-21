@@ -17,5 +17,6 @@
     <string name="task_dialog_add_group_btn">Add group</string>
     <string name="task_dialog_quit_group_btn">Odustani</string>
     <string name="task_dialog_quit_task_btn">Odustani</string>
+    <string name="due_date_txt_view">Due date</string>
 
 </resources>

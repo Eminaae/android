@@ -2,29 +2,35 @@ package ba.leftor.exercises.leftortest.fragments;
 
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import ba.leftor.exercises.leftortest.R;
+import ba.leftor.exercises.leftortest.models.Priority;
 import ba.leftor.exercises.leftortest.models.Task;
 import ba.leftor.exercises.leftortest.models.TaskGroup;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddTaskFragmentDialog extends DialogFragment {
-
+public class AddTaskFragmentDialog extends DialogFragment implements View.OnClickListener{
 
     private TaskGroup taskGroup;
     private List<TaskGroup> taskGroups;
@@ -35,6 +41,17 @@ public class AddTaskFragmentDialog extends DialogFragment {
     private EditText description;
     private EditText name;
     private ArrayAdapter<TaskGroup> spinnerAdapter;
+
+    private EditText dueDateText;
+    private DatePickerDialog dueDatePickerDialog;
+    private SimpleDateFormat dateFormatter;
+
+    private Spinner taskPrioritySpinner;
+    private List<Priority> priorityList;
+    private ArrayAdapter<Priority> priorityArrayAdapter;
+    private Priority taskPriority;
+
+
 
     public AddTaskFragmentDialog() {
         // Required empty public constructor
@@ -57,6 +74,11 @@ public class AddTaskFragmentDialog extends DialogFragment {
         this.taskGroupSpinner = (Spinner) view.findViewById(R.id.taskGroupsSpinner);
         this.description = (EditText) view.findViewById(R.id.new_task_description);
         this.name = (EditText) view.findViewById(R.id.new_task_title);
+        this.dateFormatter = new SimpleDateFormat("dd-MM-yy", Locale.ENGLISH);
+        dueDateText = (EditText) view.findViewById(R.id.due_date_edit_txt);
+        dueDateText.setInputType(InputType.TYPE_NULL);
+        dueDateText.requestFocus();
+        setDateTimeFields();
 
         /**
          * Inicijalizira array adapter koristeci {@link taskGroups}
@@ -114,6 +136,28 @@ public class AddTaskFragmentDialog extends DialogFragment {
         return view;
     }
 
+    private void setDateTimeFields() {
+        dueDateText.setOnClickListener(this);
+        Calendar newCalendar = Calendar.getInstance();
+        dueDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                dueDateText.setText(dateFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v == dueDateText){
+            dueDatePickerDialog.show();
+        }
+    }
+
+
     private void spinnerSort() {
         spinnerAdapter.sort(new Comparator<TaskGroup>() {
             @Override
@@ -134,6 +178,8 @@ public class AddTaskFragmentDialog extends DialogFragment {
 
         super.onAttach(activity);
     }
+
+
 
     public interface OnInteractionListener {
         /**

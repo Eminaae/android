@@ -1,5 +1,7 @@
 package ba.leftor.exercises.leftortest;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +16,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -62,6 +67,8 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         taskGroup = (Button) findViewById(R.id.new_group);
         dialogBtn = (Button) findViewById(R.id.task_dialog_add_task_btn);
 
+
+
         newTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,9 +76,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
                  * Vrati model trenutno selektirane grupe taskova
                  */
                 TaskGroup group = taskGroups.get(mViewPager.getCurrentItem());
-
                 AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(group, taskGroups);
-
                 fragmentDialog.show(getFragmentManager(), fragmentDialog.getClass().getSimpleName().toString());
             }
         });
@@ -81,7 +86,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
             public void onClick(View v) {
                 TaskGroup taskGroup = taskGroups.get(mViewPager.getCurrentItem());
                 AddGroupFragmentDialog fragmentDialog = AddGroupFragmentDialog.newInstance(taskGroup, taskGroups);
-                fragmentDialog.show(getSupportFragmentManager(), "hh");
+                fragmentDialog.show(getSupportFragmentManager(), "Task group");
             }
         });
 
@@ -90,13 +95,10 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         taskGroups = todoService.getTaskGroups();
         sortTabs();
         mMyAdapter = new TaskGroupsAdapter(getSupportFragmentManager(), taskGroups);
-
         mViewPager.setAdapter(mMyAdapter);
         setSupportActionBar(toolbar);
         tabLayout.setupWithViewPager(mViewPager);
         mMyAdapter.notifyDataSetChanged();
-
-        sortTabs();
         buildFAB();
 
     }
@@ -180,6 +182,10 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         mViewPager.setCurrentItem(position);
     }
 
+    /**
+     * On click floating action sub buttons
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v.getTag().equals(TAG_ADD_NEW_TASK)) {
