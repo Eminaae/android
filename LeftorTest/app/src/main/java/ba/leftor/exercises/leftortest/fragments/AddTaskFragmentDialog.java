@@ -12,8 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
+import java.util.Comparator;
 import java.util.List;
 
 import ba.leftor.exercises.leftortest.R;
@@ -31,8 +31,10 @@ public class AddTaskFragmentDialog extends DialogFragment {
     private Spinner taskGroupSpinner;
     private OnInteractionListener listener;
     private Button addTaskBtn;
+    private Button quitBtn;
     private EditText description;
     private EditText name;
+    private ArrayAdapter<TaskGroup> spinnerAdapter;
 
     public AddTaskFragmentDialog() {
         // Required empty public constructor
@@ -60,9 +62,11 @@ public class AddTaskFragmentDialog extends DialogFragment {
          * Inicijalizira array adapter koristeci {@link taskGroups}
          * Na svakom od {@link taskGroups} itema {@link TaskGroup} pozove {@link TaskGroup#toString()}
          */
-        ArrayAdapter<TaskGroup> spinnerAdapter = new ArrayAdapter<TaskGroup>(getActivity(), android.R.layout.simple_spinner_item, taskGroups);
-
+        spinnerAdapter = new ArrayAdapter<TaskGroup>(getActivity(), android.R.layout.simple_spinner_item, taskGroups);
+        spinnerSort();
         this.taskGroupSpinner.setAdapter(spinnerAdapter);
+        spinnerAdapter.notifyDataSetChanged();
+
 
         /**
          * {@link Spinner#setSelection(int)} prima poziciju itema kojeg treba selektovati.
@@ -70,9 +74,7 @@ public class AddTaskFragmentDialog extends DialogFragment {
          * {@link taskGroups}
          */
         this.taskGroupSpinner.setSelection(taskGroups.indexOf(taskGroup));
-
         addTaskBtn = (Button) view.findViewById(R.id.task_dialog_add_task_btn);
-
         addTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,15 +92,10 @@ public class AddTaskFragmentDialog extends DialogFragment {
                     task.setDescription(description.getText().toString());
                     task.setName(name.getText().toString());
                     task.setGroup_id(selectedGroup.getGroup_id());
-
-
                     /**
                      * Koristeci {@link listener} obavijestimo zainteresiranu aktivnost da se save desio
                      */
                     listener.save(task, selectedGroup);
-
-
-
                     /**
                      * Zatvorimo dijalog
                      */
@@ -106,8 +103,24 @@ public class AddTaskFragmentDialog extends DialogFragment {
                 }
             }
         });
+        quitBtn = (Button) view.findViewById(R.id.task_dialog_quit_task_btn);
+        quitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         return view;
+    }
+
+    private void spinnerSort() {
+        spinnerAdapter.sort(new Comparator<TaskGroup>() {
+            @Override
+            public int compare(TaskGroup a, TaskGroup b) {
+                return a.getName().toString().compareTo(b.getName().toString());
+            }
+        });
     }
 
     @Override

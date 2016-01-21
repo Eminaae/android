@@ -16,7 +16,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ToDoListActivity"></activity>
-        <activity android:name=".ToDoDialogActivity"></activity>
     </application>
 
 </manifest>

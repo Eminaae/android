@@ -25,7 +25,6 @@ public class WelcomeScreenActivity extends AppCompatActivity implements View.OnC
         TextView textView = (TextView)findViewById(R.id.welcome);
         String text = textView.getText().toString();
         run();
-
     }
 
 

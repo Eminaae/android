@@ -85,6 +85,7 @@ public class ToDoGroupFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(adapter);
 //        mRecyclerView.setHasFixedSize(true);
+        adapter.notifyDataSetChanged();
         return view;
     }
 

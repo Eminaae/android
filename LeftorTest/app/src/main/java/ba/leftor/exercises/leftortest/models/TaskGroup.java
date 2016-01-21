@@ -78,7 +78,6 @@ public class TaskGroup {
         groups.add(trening);
         groups.add(trening);
         groups.add(trening);
-
         return groups;
     }
 
