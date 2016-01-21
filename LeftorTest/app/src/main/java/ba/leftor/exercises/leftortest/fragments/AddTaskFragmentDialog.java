@@ -58,10 +58,12 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         setRetainInstance(true);
     }
 
-    public static AddTaskFragmentDialog newInstance(TaskGroup taskGroup, List<TaskGroup> taskGroups) {
+    public static AddTaskFragmentDialog newInstance(TaskGroup taskGroup, List<TaskGroup> taskGroups, Priority priority, List<Priority> priorities) {
         AddTaskFragmentDialog fragment = new AddTaskFragmentDialog();
         fragment.taskGroup = taskGroup;
         fragment.taskGroups = taskGroups;
+        fragment.taskPriority = priority;
+        fragment.priorityList = priorities;
         return fragment;
     }
 
@@ -96,6 +98,13 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
          * {@link taskGroups}
          */
         this.taskGroupSpinner.setSelection(taskGroups.indexOf(taskGroup));
+
+        this.taskPrioritySpinner = (Spinner) view.findViewById(R.id.taskPrioritySpinner);
+        priorityArrayAdapter = new ArrayAdapter<Priority>(getActivity(), android.R.layout.simple_spinner_item, priorityList);
+        this.taskPrioritySpinner.setAdapter(priorityArrayAdapter);
+        priorityArrayAdapter.notifyDataSetChanged();
+        this.taskPrioritySpinner.setSelection(priorityList.indexOf(taskPriority));
+
         addTaskBtn = (Button) view.findViewById(R.id.task_dialog_add_task_btn);
         addTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +115,7 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
                      * Koristeci {@link Spinner#getSelectedItem()} dohvatimo selektiranu grupu
                      */
                     TaskGroup selectedGroup = (TaskGroup) taskGroupSpinner.getSelectedItem();
+                    Priority selectedPriority = (Priority) taskPrioritySpinner.getSelectedItem();
 //                    EditText desc = (EditText) view.findViewById(R.id.new_task_description);
                     /**
                      * Inicijalizacija novog taska, postavljanje vrijednosti
@@ -114,10 +124,11 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
                     task.setDescription(description.getText().toString());
                     task.setName(name.getText().toString());
                     task.setGroup_id(selectedGroup.getGroup_id());
+                    task.setPriority((int) selectedPriority.getPriorityId());
                     /**
                      * Koristeci {@link listener} obavijestimo zainteresiranu aktivnost da se save desio
                      */
-                    listener.save(task, selectedGroup);
+                    listener.save(task, selectedGroup, selectedPriority);
                     /**
                      * Zatvorimo dijalog
                      */
@@ -185,8 +196,9 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         /**
          * @param task      Task koji snimamo
          * @param taskGroup Grupa kojoj task pripada
+         * @param selectedPriority
          */
-        void save(Task task, TaskGroup taskGroup);
+        void save(Task task, TaskGroup taskGroup, Priority selectedPriority);
     }
 
 }

@@ -57,24 +57,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:editable="false"
-        android:hint="Pick due to date">
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:hint="Pick date">
     </EditText>
 
     <Button
         android:id="@+id/task_dialog_add_task_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/new_task_group"
-        android:layout_gravity="center"
+        android:layout_below="@+id/due_date_edit_txt"
+        android:layout_weight="1"
         android:text="@string/task_dialog_add_task_btn">
     </Button>
 
     <Button
         android:id="@+id/task_dialog_quit_task_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/new_task_group"
-        android:layout_gravity="center"
+        android:layout_weight="1"
         android:text="@string/task_dialog_quit_task_btn">
     </Button>
 

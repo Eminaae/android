@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ba.leftor.exercises.leftortest.models.Priority;
 import ba.leftor.exercises.leftortest.models.Task;
 import ba.leftor.exercises.leftortest.models.TaskGroup;
 
@@ -43,6 +44,10 @@ public class ToDoGroupFragment extends Fragment {
 
     private TextView newTask;
     private TextView newTaskGroup;
+
+
+    private Priority taskPriority;
+    private List<Priority> taskPriorityList;
 
     /**
      * Use this factory method to create a new instance of
@@ -97,6 +102,12 @@ public class ToDoGroupFragment extends Fragment {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
@@ -118,9 +129,21 @@ public class ToDoGroupFragment extends Fragment {
      * @param taskGroup
      * @return
      */
+    public static Fragment newInstance(TaskGroup taskGroup, Priority taskPriority) {
+        ToDoGroupFragment fragment = new ToDoGroupFragment();
+        fragment.taskGroup = taskGroup;
+        fragment.taskPriority = taskPriority;
+        return fragment;
+    }
+
     public static Fragment newInstance(TaskGroup taskGroup) {
         ToDoGroupFragment fragment = new ToDoGroupFragment();
         fragment.taskGroup = taskGroup;
+        return fragment;
+    }
+    public static Fragment newInstance(Priority taskPriority) {
+        ToDoGroupFragment fragment = new ToDoGroupFragment();
+        fragment.taskPriority = taskPriority;
         return fragment;
     }
 

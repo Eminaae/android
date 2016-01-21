@@ -9,6 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ba.leftor.exercises.leftortest.models.Priority;
 import ba.leftor.exercises.leftortest.models.Task;
 
 /**
@@ -18,6 +19,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     private List<Task> taskList;
     private RecyclerView mRecyclerView;
+    private List<Priority> taskPriorityList;
 
     public TaskAdapter(List<Task> tasks){
         this.taskList = tasks == null ? new ArrayList<Task>() : tasks;
@@ -54,24 +56,31 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public class ViewHolder extends  RecyclerView.ViewHolder{
         public TextView taskTitle;
         public TextView taskDescription;
+        public TextView taskDueToDate;
+        public TextView taskPriority;
         private Task mTask;
 
         public ViewHolder(View itemView) {
             super(itemView);
             taskTitle = (TextView)itemView.findViewById(R.id.task_title);
             taskDescription = (TextView)itemView.findViewById(R.id.task_description);
+            //taskDueToDate = (TextView) itemView.findViewById(R.id.due_date_edit_txt);
+            //taskPriority = (TextView) itemView.findViewById(R.id.priority_txt_view);
         }
 
         public void update(){
             List<Task> list = taskList;
             TaskAdapter adapter = new TaskAdapter(taskList);
             mRecyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
 
         public void bindTaskModel(Task task){
             mTask = task;
             taskTitle.setText(mTask.getName());
             taskDescription.setText(mTask.getDescription());
+            //taskDueToDate.setText(mTask.getDate());
+            //taskPriority.setText(mTask.getPriority());
         }
     }
 }

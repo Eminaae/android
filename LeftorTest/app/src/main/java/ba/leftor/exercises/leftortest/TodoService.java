@@ -2,6 +2,7 @@ package ba.leftor.exercises.leftortest;
 
 import java.util.List;
 
+import ba.leftor.exercises.leftortest.models.Priority;
 import ba.leftor.exercises.leftortest.models.TaskGroup;
 
 /**
@@ -10,6 +11,7 @@ import ba.leftor.exercises.leftortest.models.TaskGroup;
 public class TodoService {
 
     List<TaskGroup> taskGroups;
+    List<Priority> taskPriorities;
 
     public TodoService() {
 
@@ -20,5 +22,12 @@ public class TodoService {
             taskGroups = TaskGroup.mock();
         }
         return taskGroups;
+    }
+
+    public List<Priority> getTaskPriorities(){
+        if(taskPriorities == null){
+            taskPriorities = Priority.createTaskPriorityList();
+        }
+        return taskPriorities;
     }
 }

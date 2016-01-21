@@ -1,6 +1,7 @@
 package ba.leftor.exercises.leftortest.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ public class Task {
     private int status;
     private int priority;
     private int group_id;
+    private Date date;
 
     public Task(String name, String description, int status, int priority, int group_id) {
         this.name = name;
@@ -20,6 +22,15 @@ public class Task {
         this.status = status;
         this.priority = priority;
         this.group_id = group_id;
+    }
+
+    public Task(String name, String description, int priority, int group_id, Date date, int status) {
+        this.name = name;
+        this.description = description;
+        this.priority = priority;
+        this.group_id = group_id;
+        this.date = date;
+        this.status = status;
     }
 
     public Task() {
@@ -63,6 +74,14 @@ public class Task {
 
     public void setGroup_id(int group_id) {
         this.group_id = group_id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public static List<Task> createTaskList(int taskNum){
