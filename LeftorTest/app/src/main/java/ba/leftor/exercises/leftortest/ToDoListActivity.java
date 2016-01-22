@@ -24,10 +24,10 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import ba.leftor.exercises.leftortest.app.TaskApp;
 import ba.leftor.exercises.leftortest.fragments.AddGroupFragmentDialog;
 import ba.leftor.exercises.leftortest.fragments.AddTaskFragmentDialog;
 import ba.leftor.exercises.leftortest.models.Task;
@@ -36,17 +36,21 @@ import ba.leftor.exercises.leftortest.models.TaskGroup;
 /**
  * Created by USER on 15.1.2016.
  */
-public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFragment.OnFragmentInteractionListener, AddTaskFragmentDialog.OnInteractionListener, AddGroupFragmentDialog.OnInteractionListener, View.OnClickListener {
+public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFragment.OnFragmentInteractionListener,
+        AddTaskFragmentDialog.OnInteractionListener,
+        AddGroupFragmentDialog.OnInteractionListener,
+        View.OnClickListener {
     public static final String TAG_ADD_NEW_TASK = "Add a new task";
     public static final String TAG_ADD_NEW_GROUP = "Add a new task group";
 
-    private TaskGroupsAdapter taskGroupsAdapter;
-    private ViewPager viewPager;
+    private TaskGroupsAdapter mMyAdapter;
+    private ViewPager mViewPager;
     private TabLayout tabLayout;
     private Toolbar toolbar;
     private Button newTask;
     private Button taskGroup;
-    private TaskAdapter taskAdapter;
+    private TaskAdapter mtaskAdapter;
+    private RecyclerView mRecyclerView;
     private List<Task> taskList = new LinkedList<>();
     final Context context = this;
     private Button dialogBtn;
@@ -67,20 +71,23 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         setContentView(R.layout.todo_list);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        newTask = (Button) findViewById(R.id.new_task);
-        taskGroup = (Button) findViewById(R.id.new_group);
         dialogBtn = (Button) findViewById(R.id.task_dialog_add_task_btn);
         TodoService todoService = new TodoService();
         taskPriorityList = todoService.getTaskPriorityList();
         taskStatusList = todoService.getTaskStatusList();
 
+        this.taskGroups = TaskApp.getInstance().getTaskGroups();
+
+
+        newTask = (Button) findViewById(R.id.new_task);
+        taskGroup = (Button) findViewById(R.id.new_group);
         newTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /**
                  * Vrati model trenutno selektirane grupe taskova
                  */
-                TaskGroup group = taskGroups.get(viewPager.getCurrentItem());
+                TaskGroup group = taskGroups.get(mViewPager.getCurrentItem());
                 AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(group, taskGroups, taskPriority, taskPriorityList,taskStatus, taskStatusList);
                 fragmentDialog.show(getFragmentManager(), fragmentDialog.getClass().getSimpleName().toString());
             }
@@ -89,21 +96,21 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         taskGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TaskGroup taskGroup = taskGroups.get(viewPager.getCurrentItem());
+                TaskGroup taskGroup = taskGroups.get(mViewPager.getCurrentItem());
                 AddGroupFragmentDialog fragmentDialog = AddGroupFragmentDialog.newInstance(taskGroup, taskGroups);
                 fragmentDialog.show(getSupportFragmentManager(), "Task group");
             }
         });
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        taskGroups = todoService.getTaskGroups();
+
         sortTabs();
-        taskGroupsAdapter = new TaskGroupsAdapter(getSupportFragmentManager(), taskGroups);
-        viewPager.setAdapter(taskGroupsAdapter);
+        mMyAdapter = new TaskGroupsAdapter(getSupportFragmentManager(), taskGroups);
+        mViewPager.setAdapter(mMyAdapter);
         setSupportActionBar(toolbar);
-        tabLayout.setupWithViewPager(viewPager);
-        taskGroupsAdapter.notifyDataSetChanged();
+        tabLayout.setupWithViewPager(mViewPager);
+        mMyAdapter.notifyDataSetChanged();
         buildFAB();
 
     }
@@ -148,6 +155,13 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
     public void onFragmentInteraction(Uri uri) {
     }
 
+    @Override
+    public void onAddTaskGroup() {
+        TaskGroup taskGroup = taskGroups.get(mViewPager.getCurrentItem());
+        AddGroupFragmentDialog fragmentDialog = AddGroupFragmentDialog.newInstance(taskGroup, taskGroups);
+        fragmentDialog.show(getSupportFragmentManager(), "Task group");
+    }
+
     /**
      * @param task      Task koji snimamo
      * @param taskGroup Grupa kojoj task pripada
@@ -163,8 +177,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         /**
          * Obavijesti promjene na podacima
          */
-        viewPager.setCurrentItem(taskGroups.indexOf(taskGroup), true);
-        taskGroupsAdapter.notifyDataSetChanged();
+
+        mMyAdapter.notifyDataSetChanged();
+        mViewPager.setCurrentItem(taskGroups.indexOf(taskGroup), true);
 
     }
 
@@ -183,10 +198,10 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
     public void save(TaskGroup taskGroup) {
         taskGroups.add(taskGroup);
         int position = taskGroups.size() - 1;
-        taskGroupsAdapter.notifyDataSetChanged();
-        tabLayout.setupWithViewPager(viewPager);
+        mMyAdapter.notifyDataSetChanged();
+        tabLayout.setupWithViewPager(mViewPager);
         sortTabs();
-        viewPager.setCurrentItem(position);
+        mViewPager.setCurrentItem(position);
     }
 
     /**
@@ -199,16 +214,16 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
             /**
              * Vrati model trenutno selektirane grupe taskova
              */
-            TaskGroup group = taskGroups.get(viewPager.getCurrentItem());
-            String priority = taskPriorityList.get(viewPager.getCurrentItem());
-            String status = taskStatusList.get(viewPager.getCurrentItem());
+            TaskGroup group = taskGroups.get(mViewPager.getCurrentItem());
+            String priority = taskPriorityList.get(mViewPager.getCurrentItem());
+            String status = taskStatusList.get(mViewPager.getCurrentItem());
 
             AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(group, taskGroups, priority, taskPriorityList, status, taskStatusList);
 
             fragmentDialog.show(getFragmentManager(), fragmentDialog.getClass().getSimpleName().toString());
         }
         if (v.getTag().equals(TAG_ADD_NEW_GROUP)) {
-            TaskGroup taskGroup = taskGroups.get(viewPager.getCurrentItem());
+            TaskGroup taskGroup = taskGroups.get(mViewPager.getCurrentItem());
             AddGroupFragmentDialog fragmentDialog = AddGroupFragmentDialog.newInstance(taskGroup, taskGroups);
             fragmentDialog.show(getSupportFragmentManager(), "hh");
         }
