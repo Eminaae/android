@@ -19,11 +19,11 @@ import android.widget.Spinner;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import ba.leftor.exercises.leftortest.R;
-import ba.leftor.exercises.leftortest.models.Priority;
 import ba.leftor.exercises.leftortest.models.Task;
 import ba.leftor.exercises.leftortest.models.TaskGroup;
 
@@ -47,9 +47,14 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
     private SimpleDateFormat dateFormatter;
 
     private Spinner taskPrioritySpinner;
-    private List<Priority> priorityList;
-    private ArrayAdapter<Priority> priorityArrayAdapter;
-    private Priority taskPriority;
+    private List<String> priorityList;
+    private ArrayAdapter<String> priorityArrayAdapter;
+    private String taskPriority;
+
+    private Spinner taskStatusSpinner;
+    private List<String> statusList;
+    private ArrayAdapter<String> statusArrayAdapter;
+    private String taskStatus;
 
 
 
@@ -58,12 +63,14 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         setRetainInstance(true);
     }
 
-    public static AddTaskFragmentDialog newInstance(TaskGroup taskGroup, List<TaskGroup> taskGroups, Priority priority, List<Priority> priorities) {
+    public static AddTaskFragmentDialog newInstance(TaskGroup taskGroup, List<TaskGroup> taskGroups, String priority, List<String> priorities, String status, List<String> statusList) {
         AddTaskFragmentDialog fragment = new AddTaskFragmentDialog();
         fragment.taskGroup = taskGroup;
         fragment.taskGroups = taskGroups;
         fragment.taskPriority = priority;
         fragment.priorityList = priorities;
+        fragment.taskStatus = status;
+        fragment.statusList = statusList;
         return fragment;
     }
 
@@ -76,6 +83,7 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         this.taskGroupSpinner = (Spinner) view.findViewById(R.id.taskGroupsSpinner);
         this.description = (EditText) view.findViewById(R.id.new_task_description);
         this.name = (EditText) view.findViewById(R.id.new_task_title);
+
         this.dateFormatter = new SimpleDateFormat("dd-MM-yy", Locale.ENGLISH);
         dueDateText = (EditText) view.findViewById(R.id.due_date_edit_txt);
         dueDateText.setInputType(InputType.TYPE_NULL);
@@ -90,8 +98,6 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         spinnerSort();
         this.taskGroupSpinner.setAdapter(spinnerAdapter);
         spinnerAdapter.notifyDataSetChanged();
-
-
         /**
          * {@link Spinner#setSelection(int)} prima poziciju itema kojeg treba selektovati.
          * KOristenje {@link List#indexOf(Object)} dobijemo poziciju na kojoj se nalazi {@link taskGroup} unutar
@@ -100,10 +106,17 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         this.taskGroupSpinner.setSelection(taskGroups.indexOf(taskGroup));
 
         this.taskPrioritySpinner = (Spinner) view.findViewById(R.id.taskPrioritySpinner);
-        priorityArrayAdapter = new ArrayAdapter<Priority>(getActivity(), android.R.layout.simple_spinner_item, priorityList);
+        priorityArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, priorityList);
         this.taskPrioritySpinner.setAdapter(priorityArrayAdapter);
         priorityArrayAdapter.notifyDataSetChanged();
         this.taskPrioritySpinner.setSelection(priorityList.indexOf(taskPriority));
+
+        this.taskStatusSpinner = (Spinner) view.findViewById(R.id.taskStatusSpinner);
+        statusArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, statusList);
+        this.taskStatusSpinner.setAdapter(statusArrayAdapter);
+        statusArrayAdapter.notifyDataSetChanged();
+        this.taskStatusSpinner.setSelection(statusList.indexOf(taskStatus));
+
 
         addTaskBtn = (Button) view.findViewById(R.id.task_dialog_add_task_btn);
         addTaskBtn.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +128,8 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
                      * Koristeci {@link Spinner#getSelectedItem()} dohvatimo selektiranu grupu
                      */
                     TaskGroup selectedGroup = (TaskGroup) taskGroupSpinner.getSelectedItem();
-                    Priority selectedPriority = (Priority) taskPrioritySpinner.getSelectedItem();
+                    String selectedPriority = (String) taskPrioritySpinner.getSelectedItem();
+                    String selectedStatus = (String) taskStatusSpinner.getSelectedItem();
 //                    EditText desc = (EditText) view.findViewById(R.id.new_task_description);
                     /**
                      * Inicijalizacija novog taska, postavljanje vrijednosti
@@ -124,11 +138,13 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
                     task.setDescription(description.getText().toString());
                     task.setName(name.getText().toString());
                     task.setGroup_id(selectedGroup.getGroup_id());
-                    task.setPriority((int) selectedPriority.getPriorityId());
+                    task.setPriority(selectedPriority);
+                    task.setStatus(selectedStatus);
+                    task.setDate(new Date());
                     /**
                      * Koristeci {@link listener} obavijestimo zainteresiranu aktivnost da se save desio
                      */
-                    listener.save(task, selectedGroup, selectedPriority);
+                    listener.save(task, selectedGroup, String.valueOf(selectedPriority),String.valueOf(selectedStatus));
                     /**
                      * Zatvorimo dijalog
                      */
@@ -198,7 +214,7 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
          * @param taskGroup Grupa kojoj task pripada
          * @param selectedPriority
          */
-        void save(Task task, TaskGroup taskGroup, Priority selectedPriority);
+        void save(Task task, TaskGroup taskGroup, String selectedPriority, String selectedStatus);
     }
 
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import ba.leftor.exercises.leftortest.models.Priority;
@@ -19,7 +20,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     private List<Task> taskList;
     private RecyclerView mRecyclerView;
-    private List<Priority> taskPriorityList;
+    private List<String> taskPriorityList;
 
     public TaskAdapter(List<Task> tasks){
         this.taskList = tasks == null ? new ArrayList<Task>() : tasks;
@@ -58,6 +59,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         public TextView taskDescription;
         public TextView taskDueToDate;
         public TextView taskPriority;
+        public TextView taskStatus;
         private Task mTask;
 
         public ViewHolder(View itemView) {
@@ -65,22 +67,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             taskTitle = (TextView)itemView.findViewById(R.id.task_title);
             taskDescription = (TextView)itemView.findViewById(R.id.task_description);
             //taskDueToDate = (TextView) itemView.findViewById(R.id.due_date_edit_txt);
-            //taskPriority = (TextView) itemView.findViewById(R.id.priority_txt_view);
-        }
-
-        public void update(){
-            List<Task> list = taskList;
-            TaskAdapter adapter = new TaskAdapter(taskList);
-            mRecyclerView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            taskPriority = (TextView) itemView.findViewById(R.id.priority_txt_view);
+            taskStatus = (TextView) itemView.findViewById(R.id.status_txt_view);
         }
 
         public void bindTaskModel(Task task){
             mTask = task;
             taskTitle.setText(mTask.getName());
             taskDescription.setText(mTask.getDescription());
-            //taskDueToDate.setText(mTask.getDate());
-            //taskPriority.setText(mTask.getPriority());
+            //taskDueToDate.setText(mTask.getDate().toString());
+
+            taskStatus.setText(mTask.getPriority());
+            taskPriority.setText(mTask.getStatus());
         }
     }
 }

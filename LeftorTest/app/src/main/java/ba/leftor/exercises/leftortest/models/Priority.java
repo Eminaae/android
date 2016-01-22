@@ -8,23 +8,26 @@ import java.util.List;
  */
 public class Priority {
 
-    private Long priorityId;
-    public static final int NOT_STARTED = 0;
-    public static final int IN_PROGRESS = 1;
-    public static final int QUIT = 2;
-    public static final int COMPLETED = 3;
+    public static final String LOW = "LOW";
+    public static final String MEDIUM = "MEDIUM";
+    public static final String HIGH = "HIGH";
+    public static final String VERY_HIGH = "VERY HIGH";
 
-    private List<Priority> taskPriorityList;
+    private Long priorityId;
+    private String priorityName;
+
+    private List<String> taskPriorityList;
 
 
     public Priority() {
     }
 
-    public Priority(long priorityId) {
+    public Priority(String priorityName) {
         this.priorityId = priorityId;
+        this.priorityName = priorityName;
     }
 
-    public Priority(List<Priority> taskPriorityList) {
+    public Priority(List<String> taskPriorityList) {
         this.taskPriorityList = new ArrayList<>();
     }
 
@@ -36,23 +39,25 @@ public class Priority {
         this.priorityId = priorityId;
     }
 
-    public static List<Priority> createTaskPriorityList(){
-        List<Priority> priorities = new ArrayList<>();
+    public String getPriorityName() {
+        return priorityName;
+    }
 
-        Priority notStarted = new Priority(0);
-        Priority inProgres = new Priority(1);
-        Priority quit = new Priority(2);
-        Priority completed = new Priority(3);
+    public void setPriorityName(String priorityName) {
+        this.priorityName = priorityName;
+    }
 
-        priorities.add(completed);
-        priorities.add(notStarted);
-        priorities.add(inProgres);
-        priorities.add(quit);
+    public static List<String> createTaskPriorityList(){
+        List<String> priorities = new ArrayList<>();
+        priorities.add(Priority.LOW);
+        priorities.add(Priority.MEDIUM);
+        priorities.add(Priority.HIGH);
+        priorities.add(Priority.VERY_HIGH);
         return priorities;
     }
 
     @Override
     public String toString(){
-        return String.valueOf(this.priorityId);
+        return this.priorityName;
     }
 }

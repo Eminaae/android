@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -22,12 +23,12 @@ import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import ba.leftor.exercises.leftortest.fragments.AddGroupFragmentDialog;
 import ba.leftor.exercises.leftortest.fragments.AddTaskFragmentDialog;
-import ba.leftor.exercises.leftortest.models.Priority;
 import ba.leftor.exercises.leftortest.models.Task;
 import ba.leftor.exercises.leftortest.models.TaskGroup;
 
@@ -52,8 +53,12 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
     private List<TaskGroup> taskGroups;
     private Button groupDialogBtn;
 
-    private Priority taskPriority;
-    private List<Priority> taskPriorityList;
+    private String taskPriority;
+    private List<String> taskPriorityList;
+
+    private String taskStatus;
+    private List<String > taskStatusList;
+
 
 
     @Override
@@ -65,6 +70,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         newTask = (Button) findViewById(R.id.new_task);
         taskGroup = (Button) findViewById(R.id.new_group);
         dialogBtn = (Button) findViewById(R.id.task_dialog_add_task_btn);
+        TodoService todoService = new TodoService();
+        taskPriorityList = todoService.getTaskPriorityList();
+        taskStatusList = todoService.getTaskStatusList();
 
         newTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,8 +81,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
                  * Vrati model trenutno selektirane grupe taskova
                  */
                 TaskGroup group = taskGroups.get(mViewPager.getCurrentItem());
-                Priority taskPriority = taskPriorityList.get(mViewPager.getCurrentItem());
-                AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(group, taskGroups, taskPriority, taskPriorityList);
+                AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(group, taskGroups, taskPriority, taskPriorityList,taskStatus, taskStatusList);
                 fragmentDialog.show(getFragmentManager(), fragmentDialog.getClass().getSimpleName().toString());
             }
         });
@@ -89,11 +96,10 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         });
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        TodoService todoService = new TodoService();
+
         taskGroups = todoService.getTaskGroups();
-        taskPriorityList = todoService.getTaskPriorities(); 
         sortTabs();
-        mMyAdapter = new TaskGroupsAdapter(getSupportFragmentManager(), taskGroups, taskPriorityList);
+        mMyAdapter = new TaskGroupsAdapter(getSupportFragmentManager(), taskGroups);
         mViewPager.setAdapter(mMyAdapter);
         setSupportActionBar(toolbar);
         tabLayout.setupWithViewPager(mViewPager);
@@ -110,6 +116,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
             }
         });
     }
+
 
     /**
      * Creating Floating Action Button
@@ -147,7 +154,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
      * @param selectedPriority
      */
     @Override
-    public void save(Task task, TaskGroup taskGroup, Priority selectedPriority) {
+    public void save(Task task, TaskGroup taskGroup, String selectedPriority, String selectedStatus) {
         /**
          * Dodamo u task group task
          */
@@ -193,9 +200,10 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
              * Vrati model trenutno selektirane grupe taskova
              */
             TaskGroup group = taskGroups.get(mViewPager.getCurrentItem());
-            Priority priority = taskPriorityList.get(mViewPager.getCurrentItem());
+            String priority = taskPriorityList.get(mViewPager.getCurrentItem());
+            String status = taskStatusList.get(mViewPager.getCurrentItem());
 
-            AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(group, taskGroups, priority, taskPriorityList);
+            AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(group, taskGroups, priority, taskPriorityList, status, taskStatusList);
 
             fragmentDialog.show(getFragmentManager(), fragmentDialog.getClass().getSimpleName().toString());
         }
@@ -204,17 +212,16 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
             AddGroupFragmentDialog fragmentDialog = AddGroupFragmentDialog.newInstance(taskGroup, taskGroups);
             fragmentDialog.show(getSupportFragmentManager(), "hh");
         }
+
     }
 
     public class TaskGroupsAdapter extends FragmentStatePagerAdapter {
 
         private final List<TaskGroup> taskGroups;
-        private final List<Priority> taskPriority;
 
         // TODO: 15/01/16 poslati podatke
-        public TaskGroupsAdapter(FragmentManager fm, List<TaskGroup> taskGroups, List<Priority> taskPriority) {
+        public TaskGroupsAdapter(FragmentManager fm, List<TaskGroup> taskGroups) {
             super(fm);
-            this.taskPriority = taskPriority == null ? new ArrayList<Priority>() : taskPriority;
             this.taskGroups = taskGroups == null ? new ArrayList<TaskGroup>() : taskGroups;
         }
 

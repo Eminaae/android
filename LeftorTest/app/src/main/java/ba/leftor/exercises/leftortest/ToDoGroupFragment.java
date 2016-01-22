@@ -47,7 +47,7 @@ public class ToDoGroupFragment extends Fragment {
 
 
     private Priority taskPriority;
-    private List<Priority> taskPriorityList;
+    private List<String> taskPriorityList;
 
     /**
      * Use this factory method to create a new instance of

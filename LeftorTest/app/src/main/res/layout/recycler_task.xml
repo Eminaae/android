@@ -32,5 +32,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/due_date_txt_view"
-        android:textSize="16sp"/>
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimaryDark"/>
+
+    <TextView
+        android:id="@+id/status_txt_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/priority_txt_view"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary"/>
 </RelativeLayout>

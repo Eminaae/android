@@ -11,12 +11,12 @@ public class Task {
 
     private String name;
     private String description;
-    private int status;
-    private int priority;
+    private String status;
+    private String priority;
     private int group_id;
     private Date date;
 
-    public Task(String name, String description, int status, int priority, int group_id) {
+    public Task(String name, String description, String status, String priority, int group_id) {
         this.name = name;
         this.description = description;
         this.status = status;
@@ -24,12 +24,12 @@ public class Task {
         this.group_id = group_id;
     }
 
-    public Task(String name, String description, int priority, int group_id, Date date, int status) {
+    public Task(String name, String description, String status,String priority, Date date, int group_id) {
         this.name = name;
         this.description = description;
         this.priority = priority;
         this.group_id = group_id;
-        this.date = date;
+        this.date = new Date();
         this.status = status;
     }
 
@@ -52,19 +52,19 @@ public class Task {
         this.description = description;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public int getPriority() {
+    public String getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 
@@ -87,7 +87,7 @@ public class Task {
     public static List<Task> createTaskList(int taskNum){
         List<Task> tasks = new ArrayList<>();
         for (int i = 0; i < taskNum; i++){
-            Task task = new Task("Math", "Kolokvij II", Status.VERY_HIGH, Priority.IN_PROGRESS, 1);
+            Task task = new Task("Math", "Kolokvij II", Status.IN_PROGRESS, Priority.MEDIUM, 1);
             tasks.add(task);
         }
         return tasks;

@@ -52,16 +52,16 @@ public class TaskGroup {
         TaskGroup kuca = new TaskGroup("Kuca", 0);
 
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new Task("Usisati", "Iza kauca", Status.MEDIUM, 0, kuca.getGroup_id()));
-        tasks.add(new Task("22", "Iza kauca", 1, 0, kuca.getGroup_id()));
-        tasks.add(new Task("Us22i3232323sati", "Iza kauca", 1, 0, kuca.getGroup_id()));
-        tasks.add(new Task("Usis34ati", "Iza kauca", 1, 0, kuca.getGroup_id()));
+        tasks.add(new Task("Usisati", "Iza kauca", Status.COMPLETED, Priority.LOW, kuca.getGroup_id()));
+        tasks.add(new Task("22", "Iza kauca", Status.IN_PROGRESS, Priority.HIGH, kuca.getGroup_id()));
+        tasks.add(new Task("Us22i3232323sati", "Iza kauca", Status.QUIT, Priority.MEDIUM, kuca.getGroup_id()));
+        tasks.add(new Task("Usis34ati", "Iza kauca", Status.QUIT, Priority.MEDIUM, kuca.getGroup_id()));
 
         kuca.add(tasks);
 
         TaskGroup fakultet = new TaskGroup("Fakultet", 1);
-        tasks.add(new Task("Math", "Kolokvij II", Status.VERY_HIGH, Priority.IN_PROGRESS, fakultet.getGroup_id()));
-        tasks.add(new Task("Fizika", "Kolokvij II", Status.HIGH, Priority.IN_PROGRESS, fakultet.group_id));
+        tasks.add(new Task("Math", "Kolokvij II", Status.QUIT, Priority.VERY_HIGH, fakultet.getGroup_id()));
+        tasks.add(new Task("Fizika", "Kolokvij II", Status.IN_PROGRESS, Priority.MEDIUM, fakultet.group_id));
         fakultet.add(tasks);
         TaskGroup posao = new TaskGroup("Posao", 2);
         TaskGroup birtija = new TaskGroup("Birtija", 3);
@@ -71,12 +71,6 @@ public class TaskGroup {
         groups.add(fakultet);
         groups.add(posao);
         groups.add(birtija);
-        groups.add(trening);
-        //For testing purpose
-        groups.add(trening);
-        groups.add(trening);
-        groups.add(trening);
-        groups.add(trening);
         groups.add(trening);
         return groups;
     }

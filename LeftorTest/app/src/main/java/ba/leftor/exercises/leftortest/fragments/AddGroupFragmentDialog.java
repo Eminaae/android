@@ -88,7 +88,7 @@ public class AddGroupFragmentDialog extends DialogFragment {
         try {
             this.listener = (OnInteractionListener) activity;
         } catch (ClassCastException e) {
-            throw new RuntimeException("Da bi koristio AddTaskFragment moras implementirati: " + OnInteractionListener.class.getSimpleName().toString());
+            throw new RuntimeException("Da bi koristio AddGroupFragmentDialog moras implementirati: " + OnInteractionListener.class.getSimpleName().toString());
         }
         super.onAttach(activity);
     }
