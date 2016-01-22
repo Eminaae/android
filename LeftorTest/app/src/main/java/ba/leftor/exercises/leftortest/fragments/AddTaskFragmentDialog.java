@@ -105,17 +105,9 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
          */
         this.taskGroupSpinner.setSelection(taskGroups.indexOf(taskGroup));
 
-        this.taskPrioritySpinner = (Spinner) view.findViewById(R.id.taskPrioritySpinner);
-        priorityArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, priorityList);
-        this.taskPrioritySpinner.setAdapter(priorityArrayAdapter);
-        priorityArrayAdapter.notifyDataSetChanged();
-        this.taskPrioritySpinner.setSelection(priorityList.indexOf(taskPriority));
+        setTaskPrioritySpinner(view);
 
-        this.taskStatusSpinner = (Spinner) view.findViewById(R.id.taskStatusSpinner);
-        statusArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, statusList);
-        this.taskStatusSpinner.setAdapter(statusArrayAdapter);
-        statusArrayAdapter.notifyDataSetChanged();
-        this.taskStatusSpinner.setSelection(statusList.indexOf(taskStatus));
+        setTaskStatusSpinner(view);
 
 
         addTaskBtn = (Button) view.findViewById(R.id.task_dialog_add_task_btn);
@@ -161,6 +153,22 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         });
 
         return view;
+    }
+
+    private void setTaskStatusSpinner(View view) {
+        this.taskStatusSpinner = (Spinner) view.findViewById(R.id.taskStatusSpinner);
+        statusArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, statusList);
+        this.taskStatusSpinner.setAdapter(statusArrayAdapter);
+        statusArrayAdapter.notifyDataSetChanged();
+        this.taskStatusSpinner.setSelection(statusList.indexOf(taskStatus));
+    }
+
+    private void setTaskPrioritySpinner(View view) {
+        this.taskPrioritySpinner = (Spinner) view.findViewById(R.id.taskPrioritySpinner);
+        priorityArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, priorityList);
+        this.taskPrioritySpinner.setAdapter(priorityArrayAdapter);
+        priorityArrayAdapter.notifyDataSetChanged();
+        this.taskPrioritySpinner.setSelection(priorityList.indexOf(taskPriority));
     }
 
     private void setDateTimeFields() {

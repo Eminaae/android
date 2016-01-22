@@ -1,5 +1,6 @@
 package ba.leftor.exercises.leftortest;
 
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,14 +40,13 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
     public static final String TAG_ADD_NEW_TASK = "Add a new task";
     public static final String TAG_ADD_NEW_GROUP = "Add a new task group";
 
-    private TaskGroupsAdapter mMyAdapter;
-    private ViewPager mViewPager;
+    private TaskGroupsAdapter taskGroupsAdapter;
+    private ViewPager viewPager;
     private TabLayout tabLayout;
     private Toolbar toolbar;
     private Button newTask;
     private Button taskGroup;
-    private TaskAdapter mTaskAdapter;
-    private RecyclerView mRecyclerView;
+    private TaskAdapter taskAdapter;
     private List<Task> taskList = new LinkedList<>();
     final Context context = this;
     private Button dialogBtn;
@@ -80,7 +80,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
                 /**
                  * Vrati model trenutno selektirane grupe taskova
                  */
-                TaskGroup group = taskGroups.get(mViewPager.getCurrentItem());
+                TaskGroup group = taskGroups.get(viewPager.getCurrentItem());
                 AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(group, taskGroups, taskPriority, taskPriorityList,taskStatus, taskStatusList);
                 fragmentDialog.show(getFragmentManager(), fragmentDialog.getClass().getSimpleName().toString());
             }
@@ -89,21 +89,21 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         taskGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TaskGroup taskGroup = taskGroups.get(mViewPager.getCurrentItem());
+                TaskGroup taskGroup = taskGroups.get(viewPager.getCurrentItem());
                 AddGroupFragmentDialog fragmentDialog = AddGroupFragmentDialog.newInstance(taskGroup, taskGroups);
                 fragmentDialog.show(getSupportFragmentManager(), "Task group");
             }
         });
 
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         taskGroups = todoService.getTaskGroups();
         sortTabs();
-        mMyAdapter = new TaskGroupsAdapter(getSupportFragmentManager(), taskGroups);
-        mViewPager.setAdapter(mMyAdapter);
+        taskGroupsAdapter = new TaskGroupsAdapter(getSupportFragmentManager(), taskGroups);
+        viewPager.setAdapter(taskGroupsAdapter);
         setSupportActionBar(toolbar);
-        tabLayout.setupWithViewPager(mViewPager);
-        mMyAdapter.notifyDataSetChanged();
+        tabLayout.setupWithViewPager(viewPager);
+        taskGroupsAdapter.notifyDataSetChanged();
         buildFAB();
 
     }
@@ -126,9 +126,9 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         //creating subbuttons
         ImageView iconGroup = new ImageView(this);
-        iconGroup.setImageResource(R.drawable.button_action_dark);
+        iconGroup.setImageResource(R.drawable.add_circle);
         ImageView iconTask = new ImageView(this);
-        iconTask.setImageResource(R.drawable.button_action_dark);
+        iconTask.setImageResource(R.drawable.add_circle);
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
         SubActionButton newTaskBtn = itemBuilder.setContentView(iconGroup).build();
         SubActionButton newGroupBtn = itemBuilder.setContentView(iconTask).build();
@@ -163,8 +163,8 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         /**
          * Obavijesti promjene na podacima
          */
-        mViewPager.setCurrentItem(taskGroups.indexOf(taskGroup), true);
-        mMyAdapter.notifyDataSetChanged();
+        viewPager.setCurrentItem(taskGroups.indexOf(taskGroup), true);
+        taskGroupsAdapter.notifyDataSetChanged();
 
     }
 
@@ -183,10 +183,10 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
     public void save(TaskGroup taskGroup) {
         taskGroups.add(taskGroup);
         int position = taskGroups.size() - 1;
-        mMyAdapter.notifyDataSetChanged();
-        tabLayout.setupWithViewPager(mViewPager);
+        taskGroupsAdapter.notifyDataSetChanged();
+        tabLayout.setupWithViewPager(viewPager);
         sortTabs();
-        mViewPager.setCurrentItem(position);
+        viewPager.setCurrentItem(position);
     }
 
     /**
@@ -199,16 +199,16 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
             /**
              * Vrati model trenutno selektirane grupe taskova
              */
-            TaskGroup group = taskGroups.get(mViewPager.getCurrentItem());
-            String priority = taskPriorityList.get(mViewPager.getCurrentItem());
-            String status = taskStatusList.get(mViewPager.getCurrentItem());
+            TaskGroup group = taskGroups.get(viewPager.getCurrentItem());
+            String priority = taskPriorityList.get(viewPager.getCurrentItem());
+            String status = taskStatusList.get(viewPager.getCurrentItem());
 
             AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(group, taskGroups, priority, taskPriorityList, status, taskStatusList);
 
             fragmentDialog.show(getFragmentManager(), fragmentDialog.getClass().getSimpleName().toString());
         }
         if (v.getTag().equals(TAG_ADD_NEW_GROUP)) {
-            TaskGroup taskGroup = taskGroups.get(mViewPager.getCurrentItem());
+            TaskGroup taskGroup = taskGroups.get(viewPager.getCurrentItem());
             AddGroupFragmentDialog fragmentDialog = AddGroupFragmentDialog.newInstance(taskGroup, taskGroups);
             fragmentDialog.show(getSupportFragmentManager(), "hh");
         }
