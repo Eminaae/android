@@ -9,10 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
 
+import ba.leftor.exercises.leftortest.app.TaskApp;
+import ba.leftor.exercises.leftortest.fragments.AddGroupFragmentDialog;
+import ba.leftor.exercises.leftortest.fragments.AddTaskFragmentDialog;
 import ba.leftor.exercises.leftortest.models.Priority;
 import ba.leftor.exercises.leftortest.models.Task;
 import ba.leftor.exercises.leftortest.models.TaskGroup;
@@ -26,7 +30,7 @@ import ba.leftor.exercises.leftortest.models.TaskGroup;
  * Use the {@link ToDoGroupFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ToDoGroupFragment extends Fragment {
+public class ToDoGroupFragment extends Fragment implements AddTaskFragmentDialog.OnInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -47,7 +51,8 @@ public class ToDoGroupFragment extends Fragment {
 
 
     private Priority taskPriority;
-    private List<String> taskPriorityList;
+    private Button taskGroupBtn;
+    private TaskAdapter adapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -82,13 +87,40 @@ public class ToDoGroupFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_to_do_group, container, false);
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.todo_recycler_view);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
         /**
          * Za konkretnu {@link TaskGroup} dohvatamo {@link TaskGroup#getTaskList()} listu taskova
          */
-        TaskAdapter adapter = new TaskAdapter(this.taskGroup.getTaskList());
+        this.adapter = new TaskAdapter(this.taskGroup.getTaskList());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(adapter);
+
+        newTask = (Button) view.findViewById(R.id.new_task);
+        taskGroupBtn = (Button) view.findViewById(R.id.new_group);
+        newTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * Vrati model trenutno selektirane grupe taskova
+                 */
+
+                TaskApp app = TaskApp.getInstance();
+
+                AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(taskGroup, app.getTaskGroups(), app.getTaskPriorities(), app.getTaskStatuses());
+                fragmentDialog.setListener(ToDoGroupFragment.this);
+                fragmentDialog.show(getActivity().getFragmentManager(), fragmentDialog.getClass().getSimpleName().toString());
+            }
+        });
+
+        taskGroupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onAddTaskGroup();
+                }
+            }
+        });
+
 //        mRecyclerView.setHasFixedSize(true);
         adapter.notifyDataSetChanged();
         return view;
@@ -102,7 +134,7 @@ public class ToDoGroupFragment extends Fragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
     }
@@ -126,6 +158,7 @@ public class ToDoGroupFragment extends Fragment {
 
     /**
      * Kreira fragment i dodijeli task group.
+     *
      * @param taskGroup
      * @return
      */
@@ -141,10 +174,20 @@ public class ToDoGroupFragment extends Fragment {
         fragment.taskGroup = taskGroup;
         return fragment;
     }
+
     public static Fragment newInstance(Priority taskPriority) {
         ToDoGroupFragment fragment = new ToDoGroupFragment();
         fragment.taskPriority = taskPriority;
         return fragment;
+    }
+
+    @Override
+    public void save(Task task, TaskGroup taskGroup, String selectedPriority, String selectedStatus) {
+        /**
+         * Dodamo u task group task
+         */
+        taskGroup.add(task);
+        this.adapter.notifyItemInserted(taskGroup.getTaskList().indexOf(task));
     }
 
     /**
@@ -152,7 +195,7 @@ public class ToDoGroupFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -160,6 +203,8 @@ public class ToDoGroupFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+
+        void onAddTaskGroup();
     }
 
 }

@@ -16,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -63,6 +64,15 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         setRetainInstance(true);
     }
 
+    public static AddTaskFragmentDialog newInstance(TaskGroup taskGroup, List<TaskGroup> taskGroups, List<String> priorities,List<String> statusList) {
+        AddTaskFragmentDialog fragment = new AddTaskFragmentDialog();
+        fragment.taskGroup = taskGroup;
+        fragment.taskGroups = taskGroups;
+        fragment.priorityList = priorities;
+        fragment.statusList = statusList;
+        return fragment;
+    }
+
     public static AddTaskFragmentDialog newInstance(TaskGroup taskGroup, List<TaskGroup> taskGroups, String priority, List<String> priorities, String status, List<String> statusList) {
         AddTaskFragmentDialog fragment = new AddTaskFragmentDialog();
         fragment.taskGroup = taskGroup;
@@ -108,14 +118,13 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         this.taskPrioritySpinner = (Spinner) view.findViewById(R.id.taskPrioritySpinner);
         priorityArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, priorityList);
         this.taskPrioritySpinner.setAdapter(priorityArrayAdapter);
-        priorityArrayAdapter.notifyDataSetChanged();
-        this.taskPrioritySpinner.setSelection(priorityList.indexOf(taskPriority));
 
         this.taskStatusSpinner = (Spinner) view.findViewById(R.id.taskStatusSpinner);
         statusArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, statusList);
+
         this.taskStatusSpinner.setAdapter(statusArrayAdapter);
-        statusArrayAdapter.notifyDataSetChanged();
-        this.taskStatusSpinner.setSelection(statusList.indexOf(taskStatus));
+
+
 
 
         addTaskBtn = (Button) view.findViewById(R.id.task_dialog_add_task_btn);
@@ -140,7 +149,7 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
                     task.setGroup_id(selectedGroup.getGroup_id());
                     task.setPriority(selectedPriority);
                     task.setStatus(selectedStatus);
-                    task.setDate(new Date());
+                    task.setDate(AddTaskFragmentDialog.dateFromString(dueDateText.getText().toString(), "dd-MM-yy"));
                     /**
                      * Koristeci {@link listener} obavijestimo zainteresiranu aktivnost da se save desio
                      */
@@ -161,6 +170,19 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         });
 
         return view;
+    }
+
+    public static Date dateFromString(String dateString, String dateFormat) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+//        System.out.println("Util.dateFromString: " + dateString + ", dateFormat: " + dateFormat);
+        Date convertedDate = new Date();
+        try {
+            convertedDate = simpleDateFormat.parse(dateString);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return convertedDate;
     }
 
     private void setDateTimeFields() {
@@ -194,19 +216,10 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         });
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-
-        try {
-            this.listener = (OnInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new RuntimeException("Da bi koristio AddTaskFragment moras implementirati: " + OnInteractionListener.class.getSimpleName().toString());
-        }
-
-        super.onAttach(activity);
+    public AddTaskFragmentDialog setListener(OnInteractionListener listener) {
+        this.listener = listener;
+        return this;
     }
-
-
 
     public interface OnInteractionListener {
         /**
