@@ -17,7 +17,7 @@ public interface Api {
     @GET("/taskGroups")
     void getTaskGroups(Callback<BaseResponse<List<TaskGroup>>> callback);
 
-//    @GET("/menuGroup")
-//    void getTaskGroup(@Query("id") int id, Callback callback);
+    @GET("/taskGroup/{id}")
+    void getTaskGroup(@Path("id") int id, Callback<BaseResponse<TaskGroup>> callback);
 
 }
