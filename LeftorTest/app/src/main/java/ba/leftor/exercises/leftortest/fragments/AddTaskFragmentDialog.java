@@ -1,7 +1,6 @@
 package ba.leftor.exercises.leftortest.fragments;
 
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
@@ -172,17 +171,17 @@ public class AddTaskFragmentDialog extends DialogFragment implements View.OnClic
         return view;
     }
 
-    public static Date dateFromString(String dateString, String dateFormat) {
+    public static String dateFromString(String dateString, String dateFormat) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
 //        System.out.println("Util.dateFromString: " + dateString + ", dateFormat: " + dateFormat);
-        Date convertedDate = new Date();
-        try {
-            convertedDate = simpleDateFormat.parse(dateString);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return convertedDate;
+//        String convertedDate = new Date();
+//        try {
+//            convertedDate = simpleDateFormat.parse(dateString);
+//        } catch (ParseException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+        return "";
     }
 
     private void setDateTimeFields() {

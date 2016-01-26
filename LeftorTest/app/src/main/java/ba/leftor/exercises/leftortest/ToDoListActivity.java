@@ -12,13 +12,19 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,6 +36,7 @@ import ba.leftor.exercises.leftortest.fragments.AddGroupFragmentDialog;
 import ba.leftor.exercises.leftortest.fragments.AddTaskFragmentDialog;
 import ba.leftor.exercises.leftortest.models.Task;
 import ba.leftor.exercises.leftortest.models.TaskGroup;
+import retrofit.RetrofitError;
 
 /**
  * Created by USER on 15.1.2016.
@@ -40,6 +47,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         View.OnClickListener {
     public static final String TAG_ADD_NEW_TASK = "Add a new task";
     public static final String TAG_ADD_NEW_GROUP = "Add a new task group";
+    private static final String TAG = ToDoListActivity.class.getSimpleName();
 
     private TaskGroupsAdapter mMyAdapter;
     private ViewPager mViewPager;
@@ -59,8 +67,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
     private List<String> taskPriorityList;
 
     private String taskStatus;
-    private List<String > taskStatusList;
-
+    private List<String> taskStatusList;
 
 
     @Override
@@ -71,21 +78,41 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         dialogBtn = (Button) findViewById(R.id.task_dialog_add_task_btn);
         TodoService todoService = new TodoService();
+
         taskPriorityList = todoService.getTaskPriorityList();
         taskStatusList = todoService.getTaskStatusList();
 
-        this.taskGroups = TaskApp.getInstance().getTaskGroups();
+        todoService.getApi().getTaskGroups(new retrofit.Callback<BaseResponse<List<TaskGroup>>>() {
+            @Override
+            public void success(BaseResponse<List<TaskGroup>> listBaseResponse, retrofit.client.Response response) {
+                Toast.makeText(ToDoListActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                for (TaskGroup group : listBaseResponse.getData()) {
+                    Log.d(TAG, group.toString());
+                }
 
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+                taskGroups = listBaseResponse.getData();
+                mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
 
-        sortTabs();
-        mMyAdapter = new TaskGroupsAdapter(getSupportFragmentManager(), taskGroups);
-        mViewPager.setAdapter(mMyAdapter);
-        setSupportActionBar(toolbar);
-        tabLayout.setupWithViewPager(mViewPager);
-        mMyAdapter.notifyDataSetChanged();
-        buildFAB();
+                sortTabs();
+                mMyAdapter = new TaskGroupsAdapter(getSupportFragmentManager(), taskGroups);
+                mViewPager.setAdapter(mMyAdapter);
+                setSupportActionBar(toolbar);
+                tabLayout.setupWithViewPager(mViewPager);
+                mMyAdapter.notifyDataSetChanged();
+                buildFAB();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(ToDoListActivity.this, "Failure!", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, error.toString());
+                error.printStackTrace();
+            }
+        });
+
+
+
 
     }
 
@@ -137,8 +164,8 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
     }
 
     /**
-     * @param task      Task koji snimamo
-     * @param taskGroup Grupa kojoj task pripada
+     * @param task             Task koji snimamo
+     * @param taskGroup        Grupa kojoj task pripada
      * @param selectedPriority
      */
     @Override
@@ -180,6 +207,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
 
     /**
      * On click floating action sub buttons
+     *
      * @param v
      */
     @Override

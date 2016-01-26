@@ -25,7 +25,7 @@ public class TodoService {
     List<String> taskStatusList;
 
     public TodoService() {
-        String url = "http://192.168.0.109:4000";
+        String url = "http://192.168.0.109:4000/api";
         final OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setReadTimeout(120, TimeUnit.SECONDS);
         okHttpClient.setConnectTimeout(120, TimeUnit.SECONDS);
@@ -38,7 +38,7 @@ public class TodoService {
                 .setConverter(new GsonConverter(gson)) //xml converter
 //                .setErrorHandler(new ApiErrorHandler())
 //                .setRequestInterceptor(requestInterceptor)
-//                .setLogLevel(Deplast.isDebug ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.BASIC)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
 
         api = restAdapter.create(Api.class);

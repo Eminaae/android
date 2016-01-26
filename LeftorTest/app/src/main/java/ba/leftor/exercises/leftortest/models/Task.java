@@ -14,7 +14,7 @@ public class Task {
     private String status;
     private String priority;
     private int group_id;
-    private Date date;
+    private String date;
 
     public Task(String name, String description, String status, String priority, int group_id) {
         this.name = name;
@@ -24,12 +24,11 @@ public class Task {
         this.group_id = group_id;
     }
 
-    public Task(String name, String description, String status,String priority, Date date, int group_id) {
+    public Task(String name, String description, String status, String priority, Date date, int group_id) {
         this.name = name;
         this.description = description;
         this.priority = priority;
         this.group_id = group_id;
-        this.date = new Date();
         this.status = status;
     }
 
@@ -76,17 +75,17 @@ public class Task {
         this.group_id = group_id;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public static List<Task> createTaskList(int taskNum){
+    public static List<Task> createTaskList(int taskNum) {
         List<Task> tasks = new ArrayList<>();
-        for (int i = 0; i < taskNum; i++){
+        for (int i = 0; i < taskNum; i++) {
             Task task = new Task("Math", "Kolokvij II", Status.IN_PROGRESS, Priority.MEDIUM, 1);
             tasks.add(task);
         }

@@ -11,20 +11,20 @@ public class TaskGroup {
     private String name;
     private int group_id;
 
-    List<Task> mTaskList = new ArrayList<>();
+    List<Task> tasks = new ArrayList<>();
 
     public List<Task> getTaskList() {
-        return mTaskList;
+        return tasks;
     }
 
     public void setTaskList(List<Task> taskList) {
-        mTaskList = taskList;
+        tasks = taskList;
     }
 
     public TaskGroup(String name, int group_id) {
         this.name = name;
         this.group_id = group_id;
-        this.mTaskList = new ArrayList<>();
+        this.tasks = new ArrayList<>();
     }
 
     public TaskGroup() {
@@ -76,15 +76,15 @@ public class TaskGroup {
     }
 
     private void addAll(List<Task> tasks) {
-        this.mTaskList.addAll(tasks);
+        this.tasks.addAll(tasks);
     }
 
     public void add(List<Task> tasks) {
-        this.mTaskList.addAll(tasks);
+        this.tasks.addAll(tasks);
     }
 
     public void add(Task task) {
-        this.mTaskList.add(task);
+        this.tasks.add(task);
     }
 
     public static List<TaskGroup> createTaskGroup(int groupNum) {
