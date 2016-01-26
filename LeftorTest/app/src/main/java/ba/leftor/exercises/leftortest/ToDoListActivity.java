@@ -1,6 +1,5 @@
 package ba.leftor.exercises.leftortest;
 
-import android.animation.AnimatorSet;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -78,30 +76,6 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
 
         this.taskGroups = TaskApp.getInstance().getTaskGroups();
 
-
-        newTask = (Button) findViewById(R.id.new_task);
-        taskGroup = (Button) findViewById(R.id.new_group);
-        newTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /**
-                 * Vrati model trenutno selektirane grupe taskova
-                 */
-                TaskGroup group = taskGroups.get(mViewPager.getCurrentItem());
-                AddTaskFragmentDialog fragmentDialog = AddTaskFragmentDialog.newInstance(group, taskGroups, taskPriority, taskPriorityList,taskStatus, taskStatusList);
-                fragmentDialog.show(getFragmentManager(), fragmentDialog.getClass().getSimpleName().toString());
-            }
-        });
-
-        taskGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TaskGroup taskGroup = taskGroups.get(mViewPager.getCurrentItem());
-                AddGroupFragmentDialog fragmentDialog = AddGroupFragmentDialog.newInstance(taskGroup, taskGroups);
-                fragmentDialog.show(getSupportFragmentManager(), "Task group");
-            }
-        });
-
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
 
@@ -133,7 +107,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         //creating subbuttons
         ImageView iconGroup = new ImageView(this);
-        iconGroup.setImageResource(R.drawable.add_circle);
+        iconGroup.setImageResource(R.drawable.add);
         ImageView iconTask = new ImageView(this);
         iconTask.setImageResource(R.drawable.add_circle);
         SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
@@ -225,7 +199,7 @@ public class ToDoListActivity extends AppCompatActivity implements ToDoGroupFrag
         if (v.getTag().equals(TAG_ADD_NEW_GROUP)) {
             TaskGroup taskGroup = taskGroups.get(mViewPager.getCurrentItem());
             AddGroupFragmentDialog fragmentDialog = AddGroupFragmentDialog.newInstance(taskGroup, taskGroups);
-            fragmentDialog.show(getSupportFragmentManager(), "hh");
+            fragmentDialog.show(getSupportFragmentManager(), "Task group");
         }
 
     }
